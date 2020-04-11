@@ -1,0 +1,3 @@
+"complex_main.obj" 
+TO "dot_matrix_screen" 
+RAMSIZE(256) 

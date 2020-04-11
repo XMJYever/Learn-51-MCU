@@ -1,0 +1,162 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        03/10/2020  23:21:47  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE Matrix_Board.obj TO Matrix_Board RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  Matrix_Board.obj (MATRIX_BOARD)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  Matrix_Board (MATRIX_BOARD)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0002H     UNIT         ?DT?MATRIX_BOARD
+            IDATA   000AH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     00A1H     UNIT         ?PR?KEYSCAN?MATRIX_BOARD
+            CODE    00A4H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0130H     0018H     UNIT         ?PR?MAIN?MATRIX_BOARD
+            CODE    0148H     0016H     UNIT         ?CO?MATRIX_BOARD
+            CODE    015EH     0009H     UNIT         ?PR?DELAY?MATRIX_BOARD
+            CODE    0167H     0004H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   Matrix_Board (MATRIX_BOARD)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MATRIX_BOARD
+  +--> ?C_INITSEG
+
+?PR?MAIN?MATRIX_BOARD
+  +--> ?PR?KEYSCAN?MATRIX_BOARD
+  +--> ?CO?MATRIX_BOARD
+
+?PR?KEYSCAN?MATRIX_BOARD
+  +--> ?PR?DELAY?MATRIX_BOARD
+
+
+
+SYMBOL TABLE OF MODULE:  Matrix_Board (MATRIX_BOARD)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/10/2020  23:21:47  PAGE 2
+
+
+
+  -------         MODULE        MATRIX_BOARD
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  C:0148H         PUBLIC        table
+  D:0008H         PUBLIC        number
+  D:00A8H         PUBLIC        IE
+  C:015EH         PUBLIC        delay
+  B:00A0H.6       PUBLIC        DU
+  D:00B8H         PUBLIC        IP
+  B:00A0H.7       PUBLIC        WE
+  C:0130H         PUBLIC        main
+  D:0009H         PUBLIC        KeyValue
+  C:0003H         PUBLIC        KeyScan
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          DELAY
+  -------         DO            
+  D:0006H         SYMBOL        a
+  D:0007H         SYMBOL        b
+  -------         ENDDO         
+  C:015EH         LINE#         22
+  C:015EH         LINE#         23
+  C:015EH         LINE#         25
+  C:0160H         LINE#         26
+  C:0166H         LINE#         27
+  -------         ENDPROC       DELAY
+  -------         PROC          KEYSCAN
+  C:0003H         LINE#         29
+  C:0003H         LINE#         30
+  C:0003H         LINE#         31
+  C:0006H         LINE#         32
+  C:000FH         LINE#         33
+  C:000FH         LINE#         34
+  C:0012H         LINE#         35
+  C:0018H         LINE#         36
+  C:0018H         LINE#         37
+  C:002BH         LINE#         38
+  C:002BH         LINE#         39
+  C:0030H         LINE#         40
+  C:0035H         LINE#         41
+  C:003AH         LINE#         42
+  C:003DH         LINE#         43
+  C:003DH         LINE#         44
+  C:0040H         LINE#         45
+  C:0052H         LINE#         46
+  C:0052H         LINE#         47
+  C:0057H         LINE#         48
+  C:005BH         LINE#         49
+  C:005FH         LINE#         50
+  C:0065H         LINE#         51
+  C:0065H         LINE#         52
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/10/2020  23:21:47  PAGE 3
+
+
+  C:006AH         LINE#         53
+  C:006AH         LINE#         56
+  C:006DH         LINE#         57
+  C:0072H         LINE#         58
+  C:0072H         LINE#         59
+  C:0075H         LINE#         60
+  C:007AH         LINE#         61
+  C:007AH         LINE#         62
+  C:008CH         LINE#         63
+  C:008CH         LINE#         64
+  C:0091H         LINE#         65
+  C:0096H         LINE#         66
+  C:009BH         LINE#         67
+  C:009EH         LINE#         68
+  C:009EH         LINE#         69
+  C:00A3H         LINE#         70
+  C:00A3H         LINE#         71
+  C:00A3H         LINE#         72
+  C:00A3H         LINE#         73
+  -------         ENDPROC       KEYSCAN
+  -------         PROC          MAIN
+  C:0130H         LINE#         75
+  C:0130H         LINE#         76
+  C:0130H         LINE#         77
+  C:0132H         LINE#         78
+  C:0135H         LINE#         79
+  C:0137H         LINE#         80
+  C:0137H         LINE#         81
+  C:0137H         LINE#         83
+  C:013AH         LINE#         84
+  C:013CH         LINE#         85
+  C:0144H         LINE#         86
+  C:0146H         LINE#         87
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MATRIX_BOARD
+
+Program Size: data=11.0 xdata=0 code=363
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

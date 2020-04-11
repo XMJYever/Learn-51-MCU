@@ -1,0 +1,243 @@
+C51 COMPILER V9.00   DS1302                                                                03/28/2020 16:22:29 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE DS1302
+OBJECT MODULE PLACED IN DS1302.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE DS1302.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include <intrins.h>
+   3          #define MAIN_Fosc               11059200UL      //宏定义主时钟HZ
+   4          /*====================================
+   5           自定义类型名
+   6          ====================================*/
+   7          typedef unsigned char INT8U;
+   8          typedef unsigned char uchar;
+   9          
+  10          typedef unsigned int INT16U;
+  11          typedef unsigned int uint;
+  12          
+  13          /*====================================
+  14           硬件接口位声明
+  15          ====================================*/
+  16          sbit TSCLK = P1^0;  // 时钟线，接到P10上
+  17          sbit TIO   = P1^1;      // 数据线
+  18          sbit TRST  = P1^2;      // 使能端
+  19          sbit DU  = P2^6;   //数码管段选
+  20          sbit WE  = P2^7;   //数码管位选
+  21          /*====================================
+  22          共阴极数码管段选码
+  23          ====================================*/
+  24          uchar code table[]={ 
+  25          //0             1        2     3     4     5     6     7     8
+  26          0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F,
+  27          //9     A     B    C     D         E     F              -        .        关显示
+  28          0x6F, 0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71, 0x40, 0x80, 0x00
+  29                             };
+  30          
+  31          /*====================================
+  32          数码管位选码
+  33          ====================================*/
+  34                                            //第1位       2位       3位    4位   5位      6位       7位   8位
+  35          uchar code T_COM[] = {0xfe, 0xfd, 0xfb, 0xf7, 0xef, 0xdf, 0xbf, 0x7f};//数码管位码
+  36          
+  37          /*====================================
+  38          函数：void Delay_Ms(INT16U ms)
+  39          参数：ms，毫秒延时形参
+  40          描述：12T 51单片机自适应主时钟毫秒级延时函数
+  41          ====================================*/
+  42          void Delay_Ms(INT16U ms)
+  43          {
+  44   1           INT16U i;
+  45   1               do{
+  46   2                    i = MAIN_Fosc / 96000;      // //96个时钟周期，8个机器周期
+  47   2                        while(--i);   //96T per loop
+  48   2           }while(--ms);
+  49   1      }
+  50          /*====================================
+  51          函数：void Display(INT16U Value)
+  52          参数：Value,显示值 取值0-65535
+  53          描述：共阴极数码管显示函数可显示一个字节的数
+  54          ====================================*/
+  55          void Display(uchar Hour, Min, Sec)                      //注意由于需要显示的数大于一个字节所有形参需为int型
+C51 COMPILER V9.00   DS1302                                                                03/28/2020 16:22:29 PAGE 2   
+
+  56          {       
+  57   1      //------------------------------
+  58   1              DU = 0;                                                 //关闭段选
+  59   1              P0 = table[Hour/10];            //数码管显示小时
+  60   1              DU = 1;                                                 //打开段选
+  61   1              DU = 0;                                                 //关闭段选
+  62   1      
+  63   1              WE = 0;                                         //关闭位选
+  64   1              P0 = T_COM[0];                             //第一位数码管
+  65   1              WE = 1;                                         //打开位选
+  66   1              WE = 0;                                         //关闭位选
+  67   1              Delay_Ms(3);
+  68   1      //-------------------------------
+  69   1              DU = 0;
+  70   1              P0 = table[Hour%10]|0x80; //显示第二位
+  71   1              DU = 1;
+  72   1              DU = 0;
+  73   1      
+  74   1              WE = 0;
+  75   1              P0 = T_COM[1];                    //第二位数码管
+  76   1              WE = 1;
+  77   1              WE = 0;
+  78   1              Delay_Ms(3);
+  79   1      //-------------------------------
+  80   1              DU = 0;
+  81   1              P0 = table[Min/10];             //显示个位
+  82   1              DU = 1;
+  83   1              DU = 0;
+  84   1      
+  85   1              WE = 0;
+  86   1              P0 = T_COM[2];                          //第三位数码管
+  87   1              WE = 1;
+  88   1              WE = 0;
+  89   1              Delay_Ms(3);
+  90   1      //-------------------------------
+  91   1              DU = 0;
+  92   1              P0 = table[Min%10]|0x80;                //显示分
+  93   1              DU = 1;
+  94   1              DU = 0;
+  95   1      
+  96   1              WE = 0;
+  97   1              P0 = T_COM[3];                          //第四位数码管
+  98   1              WE = 1;
+  99   1              WE = 0;
+ 100   1              Delay_Ms(3);
+ 101   1      //-------------------------------
+ 102   1              DU = 0;
+ 103   1              P0 = table[Sec/10];             //显示秒
+ 104   1              DU = 1;
+ 105   1              DU = 0;
+ 106   1      
+ 107   1              WE = 0;
+ 108   1              P0 = T_COM[4];                          //第五位数码管
+ 109   1              WE = 1;
+ 110   1              WE = 0;
+ 111   1              Delay_Ms(3);
+ 112   1      //-------------------------------
+ 113   1              DU = 0;
+ 114   1              P0 = table[Sec%10];             //显示
+ 115   1              DU = 1;
+ 116   1              DU = 0;
+ 117   1      
+C51 COMPILER V9.00   DS1302                                                                03/28/2020 16:22:29 PAGE 3   
+
+ 118   1              WE = 0;
+ 119   1              P0 = T_COM[5];                          //第六位数码管
+ 120   1              WE = 1;
+ 121   1               WE = 0;
+ 122   1              Delay_Ms(3);
+ 123   1      }
+ 124          // 写DS1302数据
+ 125          void Write_DS1302_DAT(uchar cmd, uchar dat)
+ 126          {       // 根据DS1302相关时序图来实现的
+ 127   1               uchar i;
+ 128   1               TRST = 0;       // 拉低使能端
+ 129   1               TSCLK = 0;      // 拉低数据线
+ 130   1               TRST = 1;       // 拉高使能端，产生上升沿开始写数据
+ 131   1               // 命令指令
+ 132   1               for(i=0;i<8; i++)
+ 133   1               {
+ 134   2                       TSCLK = 0;
+ 135   2                       TIO = cmd & 0x01;
+ 136   2                       TSCLK = 1;      // 拉高时钟总线，产生上升沿数据被DS1302读走
+ 137   2                       cmd >>= 1; // 右移一位
+ 138   2               }
+ 139   1               // 写数据
+ 140   1               for(i=0; i<8; i++)
+ 141   1               {
+ 142   2                      TSCLK = 0;
+ 143   2                      TIO = dat & 0x01;
+ 144   2                      TSCLK = 1;   // 拉高时钟总线，产生上升沿被DS1302读走
+ 145   2                      dat     >>= 1; //右移一位
+ 146   2               }
+ 147   1      }
+ 148          // 读DS1302数据
+ 149          uchar Read_DS1302_DAT(uchar cmd)
+ 150          {
+ 151   1              uchar i, dat;
+ 152   1              TRST = 0;
+ 153   1              TSCLK = 0;
+ 154   1              TRST = 1;
+ 155   1              // TSCLK为上升沿时进行读指令
+ 156   1              for(i=0; i<8; i++)
+ 157   1              {
+ 158   2                      TSCLK = 0;
+ 159   2                      TIO = cmd & 0x01;
+ 160   2                      TSCLK = 1;              // 拉高，产生上升沿
+ 161   2                      cmd >>= 1; // 右移一位
+ 162   2              }
+ 163   1              // 读数据
+ 164   1              for(i=0; i<8; i++)
+ 165   1              {
+ 166   2                      TSCLK = 0;  // 产生下降沿，读数据
+ 167   2                      dat >>= 1;      // 右移一位
+ 168   2                      if(TIO) dat |= 0x80;  // 读取数据，从最低位开始
+ 169   2                      TSCLK = 1;         // 拉高时钟总线，以备下一次产生下降沿
+ 170   2              } 
+ 171   1              return dat;
+ 172   1      }
+ 173          
+ 174          // 数据转BCD码
+ 175          uchar Dat_Chg_BCD(uchar dat)
+ 176          {
+ 177   1              uchar dat1, dat2;
+ 178   1              // 十进制转十六进制
+ 179   1              dat1 = dat/10;
+C51 COMPILER V9.00   DS1302                                                                03/28/2020 16:22:29 PAGE 4   
+
+ 180   1              dat2 = dat%10;
+ 181   1              dat2 = dat2 + dat1*16;
+ 182   1              return dat2;
+ 183   1      }
+ 184          
+ 185          // BCD转换为数据
+ 186          uchar BCD_Chg_Dat(uchar dat)
+ 187          {
+ 188   1              uchar dat1, dat2;
+ 189   1              dat1 = dat/16;
+ 190   1              dat2 = dat%16;
+ 191   1              dat2 = dat2 + dat1*10;
+ 192   1              return dat2;
+ 193   1      }
+ 194          
+ 195          void main()
+ 196          {
+ 197   1              uchar i;
+ 198   1              uchar Sec,Min,Hour;
+ 199   1              Write_DS1302_DAT(0x8e,0); // 清除写保护
+ 200   1              Write_DS1302_DAT(0x80,Dat_Chg_BCD(30)); // 写秒，30s
+ 201   1              Write_DS1302_DAT(0x82,Dat_Chg_BCD(17)); // 写分，25分
+ 202   1              Write_DS1302_DAT(0x84,Dat_Chg_BCD(16)); // 16时
+ 203   1              Write_DS1302_DAT(0x8e,0x80);  // 开写保护
+ 204   1              while(1)
+ 205   1              {
+ 206   2                       Write_DS1302_DAT(0x8e,0);      //清除写保护
+ 207   2                       Sec = BCD_Chg_Dat(Read_DS1302_DAT(0x81)); // 读秒寄存器（并且进行BCD码转换）
+ 208   2                       Min = BCD_Chg_Dat(Read_DS1302_DAT(0x83)); // 读分寄存器
+ 209   2                       Hour = BCD_Chg_Dat(Read_DS1302_DAT(0x85));// 读时寄存器
+ 210   2                       Write_DS1302_DAT(0x8e,0x80); // 开写保护
+ 211   2                       for(i=0; i<50; i++)    //循环显示时钟
+ 212   2                              Display(Hour,Min,Sec);
+ 213   2              }
+ 214   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    512    ----
+   CONSTANT SIZE    =     27    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

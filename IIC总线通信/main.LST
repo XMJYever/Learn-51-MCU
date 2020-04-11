@@ -1,0 +1,267 @@
+C51 COMPILER V9.00   MAIN                                                                  03/19/2020 00:28:12 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include <intrins.h>
+   3          
+   4          #define uint unsigned int
+   5          #define uchar unsigned char
+   6          #define At24c02ADDR 0xa0
+   7          #define I2cRead 1
+   8          #define I2cWrite 0
+   9          
+  10          sbit DU = P2^6;  //数码管段选
+  11          sbit WE = P2^7;  //数码管段选
+  12          sbit SCL = P2^1;
+  13          sbit SDA = P2^0;
+  14          bit AckFlag;
+  15          uchar num; // 数码管显示的值
+  16          
+  17          //共阴数码管段选表0-9
+  18          uchar  code SMGduan[]= {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F,};
+  19          // 数码管位选码
+  20          uchar code SMGwei[] = {0xfe, 0xfd, 0xfb};
+  21          /*====================================
+  22          函数    ： delay(uint z)
+  23          参数    ：z 延时毫秒设定，取值范围0-65535
+  24          返回值  ：无
+  25          描述    ：12T/Fosc11.0592M毫秒级延时
+  26          ====================================*/
+  27          void delay(uint z)
+  28          {
+  29   1              uint x,y;
+  30   1              for(x = z; x > 0; x--)
+  31   1                      for(y = 114; y > 0 ; y--);              
+  32   1      } 
+  33          
+  34          /*====================================
+  35          函数    ：display(uchar i)
+  36          参数    ：i 显示数值，取值范围0-255
+  37          返回值  ：无
+  38          描述    ：三位共阴数码管动态显示
+  39          ====================================*/
+  40          void display(uchar i)
+  41          {
+  42   1              static uchar wei; // 局部静态变量
+  43   1              //第一位数码管                  
+  44   1              P0 = 0XFF;//清除断码
+  45   1              WE = 1;//打开位选锁存器
+  46   1              P0 = SMGwei[wei]; // 1111 1110
+  47   1              WE = 0;//锁存位选数据
+  48   1              switch(wei)
+  49   1              {
+  50   2                      case 0: DU = 1; P0 = SMGduan[i/100]; DU = 0; break;
+  51   2                      case 1: DU = 1; P0 = SMGduan[i%100/10]; DU = 0; break;
+  52   2                      case 2: DU = 1; P0 = SMGduan[i%10]; DU = 0; break;
+  53   2              }
+  54   1              wei++;
+  55   1              if(wei == 3)
+C51 COMPILER V9.00   MAIN                                                                  03/19/2020 00:28:12 PAGE 2   
+
+  56   1                      wei = 0;
+  57   1      }
+  58          //定时器0初始化
+  59          void timer0Init()
+  60          {
+  61   1              EA = 1; // 打开总中断
+  62   1              ET0 = 1; // 打开定时器0中断
+  63   1              TR0 = 1;         //启动定时器0
+  64   1              TMOD |= 0X01; //定时器工作模式1，16位定时器计数模式
+  65   1              TH0 = 0xed;
+  66   1              TL0 = 0xff; //定时5ms
+  67   1      }
+  68          
+  69          /*************************************
+  70          IIC通信代码
+  71          *************************************/
+  72          void delay5us()
+  73          {
+  74   1              _nop_(); // 库函数，延时一个机器周期
+  75   1      }
+  76          // 起始信号
+  77          void I2cStart()
+  78          {
+  79   1               SCL = 1;
+  80   1               SDA = 1;
+  81   1               delay5us();
+  82   1               SDA = 0;
+  83   1               delay5us();
+  84   1      }
+  85          // 终止信号
+  86          void I2cStop()
+  87          {
+  88   1              SCL = 0;
+  89   1              SDA = 0;
+  90   1              SCL = 1;
+  91   1              delay5us();
+  92   1              SDA = 1;
+  93   1              delay5us();
+  94   1      }
+  95          // 总线读从机应答信号
+  96          bit ReadACK()
+  97          {
+  98   1              SCL= 0;  // 拉低时钟总线，允许从机控制SDA
+  99   1              SCL = 1; // 拉高，读SDA
+ 100   1              delay5us();
+ 101   1              if(SDA)  // NOACK
+ 102   1              {
+ 103   2                      SCL = 0;
+ 104   2                      return(1);
+ 105   2              }
+ 106   1              else  // ACK
+ 107   1              {
+ 108   2                      SCL = 0;
+ 109   2                      return(0);
+ 110   2              }
+ 111   1      }
+ 112          // 接收数据之后，主机对从机发送应答，从机释放SDA线
+ 113          void SendACK(bit i)
+ 114          {
+ 115   1              SCL = 0;
+ 116   1              if(i)   // 如果有数据，则非应答
+ 117   1                      SDA = 1;
+C51 COMPILER V9.00   MAIN                                                                  03/19/2020 00:28:12 PAGE 3   
+
+ 118   1              else
+ 119   1                      SDA = 0;
+ 120   1              SCL = 1;
+ 121   1              delay5us();
+ 122   1              SCL = 0;
+ 123   1              SDA = 1;  // 释放数据总线
+ 124   1      }
+ 125          
+ 126          // I2c发送一个字节数据
+ 127          void I2cSendByte(uchar DAT)
+ 128          {
+ 129   1              uchar i;
+ 130   1              for(i=0; i<8; i++)
+ 131   1              {
+ 132   2                      SCL = 0;
+ 133   2                      if(DAT & 0x80)
+ 134   2                              SDA = 1;
+ 135   2                      else
+ 136   2                              SDA = 0;
+ 137   2                      SCL = 1;
+ 138   2                      DAT <<= 1;      // 左移
+ 139   2              }
+ 140   1              SCL = 0;
+ 141   1              SDA = 1;  // 释放数据总线
+ 142   1      }
+ 143          
+ 144          // AT24c02指定单元写入一个字节数据
+ 145          void At24c02Write(uchar ADDR, DAT)
+ 146          {
+ 147   1              I2cStart();
+ 148   1              I2cSendByte(At24c02ADDR + I2cWrite);// I2C发送一个字节
+ 149   1              if(ReadACK())  // 读从机应答
+ 150   1              {
+ 151   2                      AckFlag = 1; // NO ACK
+ 152   2              }
+ 153   1              else
+ 154   1                      AckFlag = 0;  // ACK
+ 155   1              I2cSendByte(ADDR);// I2C发送首地址
+ 156   1              if(ReadACK())
+ 157   1              {
+ 158   2                      AckFlag = 1; // NO ACK
+ 159   2              }
+ 160   1              else
+ 161   1                      AckFlag = 0;  // ACK
+ 162   1              I2cSendByte(DAT);// I2C发送数据
+ 163   1              if(ReadACK())   // 读应答
+ 164   1              {
+ 165   2                      AckFlag = 1; // NO ACK
+ 166   2              }
+ 167   1              else
+ 168   1                      AckFlag = 0;  // ACK
+ 169   1              I2cStop();
+ 170   1      }
+ 171          
+ 172          // I2c总线读一字节数据
+ 173          uchar I2cReadByte()
+ 174          {
+ 175   1              uchar i, DAT;
+ 176   1              for(i=0; i<8; i++)
+ 177   1              {
+ 178   2                      DAT <<= 1;      // 数据左移1位，每次读一位
+ 179   2                      SCL = 0;
+C51 COMPILER V9.00   MAIN                                                                  03/19/2020 00:28:12 PAGE 4   
+
+ 180   2                      SCL = 1;
+ 181   2                      if(SDA)
+ 182   2                              DAT |= 0x01;
+ 183   2              }
+ 184   1              return(DAT);
+ 185   1      }
+ 186          // 读AT24C02指定单元内数据
+ 187          uchar At24C02Read(uchar ADDR)
+ 188          {
+ 189   1              uchar DAT;
+ 190   1              I2cStart();
+ 191   1              I2cSendByte(At24c02ADDR + I2cWrite);// I2C发送一个字节
+ 192   1              if(ReadACK()) // 读从机应答
+ 193   1              {
+ 194   2                      AckFlag = 1; // NO ACK
+ 195   2              }
+ 196   1              else
+ 197   1                      AckFlag = 0;  // ACK
+ 198   1              I2cSendByte(ADDR);// I2C发送首地址
+ 199   1              ReadACK();
+ 200   1              I2cStart();
+ 201   1              I2cSendByte(At24c02ADDR + I2cRead);// 发送器件地址加读写方向位 读
+ 202   1              if(ReadACK())   // 读从机应答
+ 203   1              {
+ 204   2                      AckFlag = 1; // NO ACK
+ 205   2              }
+ 206   1              else
+ 207   1                      AckFlag = 0;  // ACK
+ 208   1              DAT = I2cReadByte(); //
+ 209   1              SendACK(1);     // 主机发送非应答
+ 210   1              I2cStop();
+ 211   1              return(DAT);
+ 212   1      
+ 213   1      }
+ 214          
+ 215          void main()//main函数自身会循环
+ 216          {
+ 217   1              timer0Init();//定时器0初始化
+ 218   1              EA = 0; // 屏蔽中断
+ 219   1              At24c02Write(3, 188);   // 在第二个地址中写入9
+ 220   1              delay(10);        // 等待处理
+ 221   1              num = At24C02Read(3);
+ 222   1              if(AckFlag)
+ 223   1                      P1 = 0;
+ 224   1              else
+ 225   1                      P1 = 0xff;
+ 226   1              EA = 1; // 开中断
+ 227   1              while(1);       
+ 228   1      }  
+ 229          
+ 230          // 中断方式是硬件方式清0，计数方式是软件清零
+ 231          void timer0() interrupt 1  // 定时器0的中断入口1
+ 232          {
+ 233   1              TH0 = 0Xed;
+ 234   1              TL0 = 0Xff;     
+ 235   1              display(num); //数码管显示函数
+ 236   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    431    ----
+   CONSTANT SIZE    =     13    ----
+C51 COMPILER V9.00   MAIN                                                                  03/19/2020 00:28:12 PAGE 5   
+
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

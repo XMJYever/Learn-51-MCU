@@ -1,0 +1,61 @@
+C51 COMPILER V9.00   MAIN                                                                  03/11/2020 16:25:37 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h>
+   2          sbit DIO = P3^4;   // 串行数据口
+   3          sbit S_CLK = P3^5; // 移位寄存器时钟
+   4          sbit R_CLK = P3^6; // 输出锁存器时钟
+   5          
+   6          void main()
+   7          {
+   8   1              // row 0x80 ，COL 0xfe。点亮第一个点
+   9   1              // 串行输入
+  10   1              unsigned char i, dat;
+  11   1              dat = 0xfe;      // 列项的值
+  12   1              for(i=0;i<8;i++)
+  13   1              {
+  14   2                      S_CLK = 0;
+  15   2                      R_CLK = 0;
+  16   2                      if(dat & 0x01)   // 判断第1位为1
+  17   2                              DIO = 1;
+  18   2                      else
+  19   2                              DIO = 0;
+  20   2                      S_CLK = 1;  // 产生上升沿，移位至寄存器中
+  21   2                      dat >>= 1;  // 右移1位，发送数据        
+  22   2              }               
+  23   1      
+  24   1              dat = 0x80;
+  25   1              for(i=0;i<8;i++)
+  26   1              {
+  27   2                      S_CLK = 0;
+  28   2                      R_CLK = 0;
+  29   2                      if(dat & 0x01)   // 判断是否为第8位
+  30   2                              DIO = 1;
+  31   2                      else
+  32   2                              DIO = 0;
+  33   2                      S_CLK = 1;  // 产生上升沿，移位至寄存器中
+  34   2                      dat >>= 1;  // 右移1位，发送数据        
+  35   2              }
+  36   1              R_CLK = 1;  // 将所有数据输出
+  37   1              while(1);   // 让程序保持
+  38   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     60    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

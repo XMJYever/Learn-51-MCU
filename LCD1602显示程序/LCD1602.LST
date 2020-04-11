@@ -1,0 +1,93 @@
+C51 COMPILER V9.00   LCD1602                                                               03/28/2020 21:46:34 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE LCD1602
+OBJECT MODULE PLACED IN LCD1602.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE LCD1602.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h>
+   2          
+   3          typedef unsigned char uchar;
+   4          typedef unsigned int uint;
+   5          
+   6          // 管脚命名
+   7          sbit EN = P3^4;    // 使能信号
+   8          sbit RW = P3^6;    // 读/写选择端
+   9          sbit RS = P3^5;    // 数据/命令选择段(H/L)
+  10          // 判断液晶忙不忙，如果忙则等待
+  11          void Read_Busy()
+  12          {
+  13   1              uchar busy;
+  14   1              P0 = 0xff;
+  15   1              RS = 0;
+  16   1              RW = 1;
+  17   1              do
+  18   1              {
+  19   2                      EN = 1;
+  20   2                      busy = P0; // 读P0接口的状态字，D7位读写操作使能
+  21   2                      EN = 0; 
+  22   2              }while(busy & 0x80);
+  23   1      }
+  24          // 写LCD1602命令
+  25          void Write_Cmd(uchar cmd)
+  26          {
+  27   1              Read_Busy();
+  28   1              RS = 0;
+  29   1              RW = 0;
+  30   1              P0 = cmd;
+  31   1              EN = 1;  //     传入指令给LCD
+  32   1              EN = 0;  //释放
+  33   1      }
+  34          // 写一个字节数据
+  35          void Write_Dat(uchar dat)
+  36          {
+  37   1              Read_Busy();
+  38   1              RS = 1;
+  39   1              RW = 0;
+  40   1              P0 = dat;
+  41   1              EN = 1;
+  42   1              EN = 0;
+  43   1      }
+  44          
+  45          void main()
+  46          {
+  47   1              uchar i;
+  48   1              uint k = 1000;
+  49   1              uchar *a[] = {"Monday", "Tuesday", "Wednesday"};
+  50   1              uchar *p;
+  51   1              Write_Cmd(0x38);  // 设置16*2显示
+  52   1              Write_Cmd(0x0f);  // 开显示
+  53   1              Write_Cmd(0x01);  // 清屏
+  54   1              Write_Cmd(0x07);  // 地址指针移位命令
+  55   1              Write_Cmd(0x80 | 0x10);  // 显示地址
+C51 COMPILER V9.00   LCD1602                                                               03/28/2020 21:46:34 PAGE 2   
+
+  56   1              p = a;
+*** WARNING C182 IN LINE 56 OF LCD1602.C: pointer to different objects
+  57   1              for(i=0; i<3; i++)
+  58   1              {
+  59   2                      p = a[i];
+  60   2                      while(*p != '\0')
+  61   2                              {
+  62   3                                       Write_Dat(*p++);  // 写数据     当作acsii码来显示
+  63   3                                       while(k--);
+  64   3                              }
+  65   2              }
+  66   1              while(1);
+  67   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    181    ----
+   CONSTANT SIZE    =     34    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      14
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

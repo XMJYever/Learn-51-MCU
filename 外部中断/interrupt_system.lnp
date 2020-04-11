@@ -1,0 +1,3 @@
+"interrupt_system.obj" 
+TO "interrupt_system" 
+RAMSIZE(256) 

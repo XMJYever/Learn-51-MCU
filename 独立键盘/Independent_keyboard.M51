@@ -1,0 +1,130 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        03/10/2020  21:44:39  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE Independent_keyboard.obj TO Independent_keyboard RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  Independent_keyboard.obj (INDEPENDENT_KEYBOARD)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  Independent_keyboard (INDEPENDENT_KEYBOARD)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0001H     UNIT         ?DT?INDEPENDENT_KEYBOARD
+            IDATA   0009H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     008CH     UNIT         ?C_C51STARTUP
+            CODE    008FH     0046H     UNIT         ?PR?MAIN?INDEPENDENT_KEYBOARD
+            CODE    00D5H     0010H     UNIT         ?CO?INDEPENDENT_KEYBOARD
+            CODE    00E5H     0009H     UNIT         ?PR?DELAY?INDEPENDENT_KEYBOARD
+            CODE    00EEH     0004H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   Independent_keyboard (INDEPENDENT_KEYBOARD)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?INDEPENDENT_KEYBOARD
+  +--> ?C_INITSEG
+
+?PR?MAIN?INDEPENDENT_KEYBOARD
+  +--> ?PR?DELAY?INDEPENDENT_KEYBOARD
+  +--> ?CO?INDEPENDENT_KEYBOARD
+
+
+
+SYMBOL TABLE OF MODULE:  Independent_keyboard (INDEPENDENT_KEYBOARD)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        INDEPENDENT_KEYBOARD
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/10/2020  21:44:39  PAGE 2
+
+
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  C:00D5H         PUBLIC        table
+  D:0008H         PUBLIC        number
+  D:00A8H         PUBLIC        IE
+  C:00E5H         PUBLIC        delay
+  B:00A0H.6       PUBLIC        DU
+  D:00B8H         PUBLIC        IP
+  B:00A0H.7       PUBLIC        WE
+  C:008FH         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  B:00B0H.0       PUBLIC        key_s2
+  B:00B0H.1       PUBLIC        key_s3
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          DELAY
+  -------         DO            
+  D:0006H         SYMBOL        a
+  D:0007H         SYMBOL        b
+  -------         ENDDO         
+  C:00E5H         LINE#         18
+  C:00E5H         LINE#         19
+  C:00E5H         LINE#         21
+  C:00E7H         LINE#         22
+  C:00EDH         LINE#         23
+  -------         ENDPROC       DELAY
+  -------         PROC          MAIN
+  C:008FH         LINE#         25
+  C:008FH         LINE#         26
+  C:008FH         LINE#         27
+  C:0091H         LINE#         28
+  C:0094H         LINE#         29
+  C:0096H         LINE#         31
+  C:0096H         LINE#         32
+  C:0096H         LINE#         33
+  C:0099H         LINE#         34
+  C:0099H         LINE#         35
+  C:009CH         LINE#         36
+  C:009EH         LINE#         37
+  C:00A3H         LINE#         38
+  C:00A6H         LINE#         39
+  C:00A9H         LINE#         40
+  C:00A9H         LINE#         41
+  C:00ABH         LINE#         42
+  C:00B3H         LINE#         43
+  C:00B5H         LINE#         45
+  C:00B8H         LINE#         46
+  C:00B8H         LINE#         47
+  C:00BBH         LINE#         48
+  C:00C2H         LINE#         49
+  C:00C4H         LINE#         50
+  C:00C7H         LINE#         51
+  C:00C7H         LINE#         52
+  C:00C9H         LINE#         53
+  C:00D1H         LINE#         54
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/10/2020  21:44:39  PAGE 3
+
+
+  C:00D3H         LINE#         55
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        INDEPENDENT_KEYBOARD
+
+Program Size: data=10.0 xdata=0 code=242
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,95 @@
+C51 COMPILER V9.00   MAIN                                                                  03/22/2020 15:02:07 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h>
+   2          
+   3          void time0_Init()
+   4          {
+   5   1              TMOD |= 0x01;
+   6   1              TR0 = 1; // 打开定时器
+   7   1              TH0 = 56320/256; // 计数起点为10ms溢出一次
+   8   1              TL0 = 56320%256;
+   9   1      }
+  10          
+  11          void time1_Init()
+  12          {
+  13   1      
+  14   1      }
+  15          
+  16          void ISR_Init()
+  17          {
+  18   1              EA = 1; //总中断开启
+  19   1              ET0 = 1; // 开启定时器中断，TF0控制位置1，表名TF0=1时，中断系统介入
+  20   1              EX0 = 1; // 外部中断0
+  21   1              EX1 = 0;
+  22   1              ET1 = 0;
+  23   1              ES = 0;  // UART中断没有开启
+  24   1      }
+  25          
+  26          // 中断服务子程序，希望中断系统来调用，而不是在main函数中调用
+  27          void IE0_isr() interrupt 0
+  28          {
+  29   1      
+  30   1      }
+  31          
+  32          void TF0_isr() interrupt 1 // 由于上面进入一次，由于设置了计数起点，所以10ms溢出一次
+  33          {
+  34   1              static char c;
+  35   1              TH0 = 56320/256;  // 重装初值
+  36   1              TL0 = 56320%256;
+  37   1              c++;
+  38   1              if(c==50)
+  39   1              {
+  40   2                      P1^=(1<<0);
+  41   2                      c = 0;
+  42   2              }
+  43   1      }
+  44          
+  45          void IE1_isr() interrupt 2
+  46          {
+  47   1      
+  48   1      }
+  49          
+  50          void TF1_isr() interrupt 3
+  51          {
+  52   1      
+  53   1      }
+  54          
+  55          void RI_TI_isr() interrupt 4
+C51 COMPILER V9.00   MAIN                                                                  03/22/2020 15:02:07 PAGE 2   
+
+  56          {
+  57   1      
+  58   1      }
+  59          
+  60          void main()
+  61          {
+  62   1              time0_Init();
+  63   1              time1_Init();
+  64   1              ISR_Init();
+  65   1      
+  66   1              while(1)
+  67   1              {
+  68   2                      
+  69   2              }
+  70   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     69    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

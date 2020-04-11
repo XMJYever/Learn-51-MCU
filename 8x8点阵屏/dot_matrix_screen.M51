@@ -1,0 +1,127 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        03/11/2020  18:12:17  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE complex_main.obj TO dot_matrix_screen RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  complex_main.obj (COMPLEX_MAIN)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  dot_matrix_screen (COMPLEX_MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0051H     UNIT         ?PR?MAIN?COMPLEX_MAIN
+            CODE    0054H     001DH     UNIT         ?PR?_SEND_BYTE?COMPLEX_MAIN
+            CODE    0071H     0010H     UNIT         ?CO?COMPLEX_MAIN
+            CODE    0081H     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   dot_matrix_screen (COMPLEX_MAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?COMPLEX_MAIN
+
+?PR?MAIN?COMPLEX_MAIN
+  +--> ?CO?COMPLEX_MAIN
+  +--> ?PR?_SEND_BYTE?COMPLEX_MAIN
+
+
+
+SYMBOL TABLE OF MODULE:  dot_matrix_screen (COMPLEX_MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        COMPLEX_MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  C:0054H         PUBLIC        _Send_Byte
+  D:00B0H         PUBLIC        P3
+  C:0071H         PUBLIC        table
+  B:00B0H.6       PUBLIC        R_CLK
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/11/2020  18:12:17  PAGE 2
+
+
+  B:00B0H.5       PUBLIC        S_CLK
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  C:0003H         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  B:00B0H.4       PUBLIC        DIO
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _SEND_BYTE
+  D:0007H         SYMBOL        dat
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:0054H         LINE#         10
+  C:0054H         LINE#         11
+  C:0054H         LINE#         13
+  C:0056H         LINE#         14
+  C:0058H         LINE#         15
+  C:005AH         LINE#         16
+  C:005AH         LINE#         17
+  C:005EH         LINE#         18
+  C:0062H         LINE#         20
+  C:0064H         LINE#         21
+  C:0066H         LINE#         22
+  C:006AH         LINE#         23
+  C:006CH         LINE#         24
+  C:0070H         LINE#         25
+  -------         ENDPROC       _SEND_BYTE
+  -------         PROC          MAIN
+  -------         DO            
+  D:0001H         SYMBOL        j
+  D:0005H         SYMBOL        k
+  D:0004H         SYMBOL        ROW
+  D:0002H         SYMBOL        z
+  -------         ENDDO         
+  C:0003H         LINE#         26
+  C:0003H         LINE#         27
+  C:0003H         LINE#         30
+  C:0003H         LINE#         31
+  C:0003H         LINE#         33
+  C:0005H         LINE#         34
+  C:0005H         LINE#         35
+  C:0008H         LINE#         36
+  C:0008H         LINE#         37
+  C:000AH         LINE#         39
+  C:000CH         LINE#         40
+  C:000CH         LINE#         41
+  C:002AH         LINE#         42
+  C:002FH         LINE#         43
+  C:0031H         LINE#         44
+  C:0033H         LINE#         45
+  C:003FH         LINE#         46
+  C:0043H         LINE#         47
+  C:004EH         LINE#         48
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        COMPLEX_MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/11/2020  18:12:17  PAGE 3
+
+
+
+Program Size: data=9.0 xdata=0 code=141
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

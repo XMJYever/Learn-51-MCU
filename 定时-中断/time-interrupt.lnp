@@ -1,0 +1,3 @@
+"main.obj" 
+TO "time-interrupt" 
+RAMSIZE(256) 

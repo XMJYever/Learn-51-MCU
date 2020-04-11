@@ -1,0 +1,171 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        03/28/2020  21:46:34  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE LCD1602.obj TO LCD1602 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  LCD1602.obj (LCD1602)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?COPY)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?CLDPTR)
+
+
+LINK MAP OF MODULE:  LCD1602 (LCD1602)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000EH     UNIT         _DATA_GROUP_
+            IDATA   0016H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     010FH     UNIT         ?C?LIB_CODE
+            CODE    0112H     0083H     UNIT         ?PR?MAIN?LCD1602
+            CODE    0195H     0022H     UNIT         ?CO?LCD1602
+            CODE    01B7H     0012H     UNIT         ?PR?READ_BUSY?LCD1602
+            CODE    01C9H     0010H     UNIT         ?PR?_WRITE_CMD?LCD1602
+            CODE    01D9H     0010H     UNIT         ?PR?_WRITE_DAT?LCD1602
+            CODE    01E9H     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   LCD1602 (LCD1602)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?LCD1602
+
+?PR?MAIN?LCD1602               0008H    000EH
+  +--> ?CO?LCD1602
+  +--> ?PR?_WRITE_CMD?LCD1602
+  +--> ?PR?_WRITE_DAT?LCD1602
+
+?PR?_WRITE_CMD?LCD1602         -----    -----
+  +--> ?PR?READ_BUSY?LCD1602
+
+?PR?_WRITE_DAT?LCD1602         -----    -----
+  +--> ?PR?READ_BUSY?LCD1602
+
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/28/2020  21:46:34  PAGE 2
+
+
+
+SYMBOL TABLE OF MODULE:  LCD1602 (LCD1602)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        LCD1602
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  C:01C9H         PUBLIC        _Write_Cmd
+  C:01B7H         PUBLIC        Read_Busy
+  C:01D9H         PUBLIC        _Write_Dat
+  D:00A8H         PUBLIC        IE
+  B:00B0H.4       PUBLIC        EN
+  D:00B8H         PUBLIC        IP
+  B:00B0H.5       PUBLIC        RS
+  C:0112H         PUBLIC        main
+  B:00B0H.6       PUBLIC        RW
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:01AEH         SYMBOL        _?ix1000
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          READ_BUSY
+  -------         DO            
+  D:0007H         SYMBOL        busy
+  -------         ENDDO         
+  C:01B7H         LINE#         11
+  C:01B7H         LINE#         12
+  C:01B7H         LINE#         14
+  C:01BAH         LINE#         15
+  C:01BCH         LINE#         16
+  C:01BEH         LINE#         18
+  C:01BEH         LINE#         19
+  C:01C0H         LINE#         20
+  C:01C2H         LINE#         21
+  C:01C4H         LINE#         22
+  C:01C8H         LINE#         23
+  -------         ENDPROC       READ_BUSY
+  -------         PROC          _WRITE_CMD
+  D:0006H         SYMBOL        cmd
+  C:01C9H         LINE#         25
+  C:01CBH         LINE#         26
+  C:01CBH         LINE#         27
+  C:01CEH         LINE#         28
+  C:01D0H         LINE#         29
+  C:01D2H         LINE#         30
+  C:01D4H         LINE#         31
+  C:01D6H         LINE#         32
+  C:01D8H         LINE#         33
+  -------         ENDPROC       _WRITE_CMD
+  -------         PROC          _WRITE_DAT
+  D:0006H         SYMBOL        dat
+  C:01D9H         LINE#         35
+  C:01DBH         LINE#         36
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/28/2020  21:46:34  PAGE 3
+
+
+  C:01DBH         LINE#         37
+  C:01DEH         LINE#         38
+  C:01E0H         LINE#         39
+  C:01E2H         LINE#         40
+  C:01E4H         LINE#         41
+  C:01E6H         LINE#         42
+  C:01E8H         LINE#         43
+  -------         ENDPROC       _WRITE_DAT
+  -------         PROC          MAIN
+  -------         DO            
+  D:0005H         SYMBOL        i
+  D:0008H         SYMBOL        k
+  D:000AH         SYMBOL        a
+  D:0013H         SYMBOL        p
+  -------         ENDDO         
+  C:0112H         LINE#         45
+  C:0112H         LINE#         46
+  C:0112H         LINE#         48
+  C:0118H         LINE#         49
+  C:012BH         LINE#         51
+  C:0130H         LINE#         52
+  C:0135H         LINE#         53
+  C:013AH         LINE#         54
+  C:013FH         LINE#         55
+  C:0144H         LINE#         56
+  C:014DH         LINE#         57
+  C:014FH         LINE#         58
+  C:014FH         LINE#         59
+  C:0164H         LINE#         60
+  C:016FH         LINE#         61
+  C:016FH         LINE#         62
+  C:0180H         LINE#         63
+  C:018FH         LINE#         65
+  C:0193H         LINE#         66
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        LCD1602
+
+  -------         MODULE        ?C?COPY
+  C:00D3H         PUBLIC        ?C?COPY
+  -------         ENDMOD        ?C?COPY
+
+  -------         MODULE        ?C?CLDPTR
+  C:00F9H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+Program Size: data=23.0 xdata=0 code=501
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

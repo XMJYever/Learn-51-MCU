@@ -1,0 +1,225 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        03/16/2020  21:38:21  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE UART.obj TO UART RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  UART.obj (UART)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (PUTS)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?CLDPTR)
+  C:\KEIL\C51\LIB\C51S.LIB (PUTCHAR)
+
+
+LINK MAP OF MODULE:  UART (UART)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0004H     UNIT         ?DT?UART
+            IDATA   000CH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     004EH     UNIT         ?PR?_DISPLAY?UART
+            CODE    005CH     002AH     UNIT         ?PR?_PUTS?PUTS
+            CODE    0086H     0027H     UNIT         ?PR?TIMER0?UART
+            CODE    00ADH     0027H     UNIT         ?PR?PUTCHAR?PUTCHAR
+            CODE    00D4H     0024H     UNIT         ?CO?UART
+            CODE    00F8H     001FH     UNIT         ?PR?MAIN?UART
+            CODE    0117H     001EH     UNIT         ?PR?_DELAY?UART
+            CODE    0135H     0019H     UNIT         ?C?LIB_CODE
+            CODE    014EH     0016H     UNIT         ?PR?UARTINIT?UART
+            CODE    0164H     0010H     UNIT         ?PR?TIMER0INIT?UART
+            CODE    0174H     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   UART (UART)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?PR?TIMER0?UART
+  +--> ?PR?_DISPLAY?UART
+
+?PR?_DISPLAY?UART
+  +--> ?CO?UART
+
+*** NEW ROOT ***************************************************
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/16/2020  21:38:21  PAGE 2
+
+
+?C_C51STARTUP
+  +--> ?PR?MAIN?UART
+
+?PR?MAIN?UART
+  +--> ?PR?TIMER0INIT?UART
+  +--> ?PR?UARTINIT?UART
+  +--> ?CO?UART
+  +--> ?PR?_PUTS?PUTS
+  +--> ?PR?_DELAY?UART
+
+?PR?_PUTS?PUTS
+  +--> ?PR?PUTCHAR?PUTCHAR
+
+
+
+SYMBOL TABLE OF MODULE:  UART (UART)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        UART
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  D:0009H         PUBLIC        mSec
+  D:00A8H         PUBLIC        IE
+  C:0117H         PUBLIC        _delay
+  C:00EBH         PUBLIC        SMGduan
+  B:00A8H.4       PUBLIC        ES
+  B:00A0H.6       PUBLIC        DU
+  D:00B8H         PUBLIC        IP
+  D:000AH         PUBLIC        Sec
+  B:00A0H.7       PUBLIC        WE
+  B:0098H.1       PUBLIC        TI
+  C:00F8H         PUBLIC        main
+  C:00F5H         PUBLIC        SMGwei
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  B:00A8H.1       PUBLIC        ET0
+  D:008CH         PUBLIC        TH0
+  D:008DH         PUBLIC        TH1
+  B:0098H.7       PUBLIC        SM0
+  D:008AH         PUBLIC        TL0
+  D:000BH         PUBLIC        num
+  B:0098H.6       PUBLIC        SM1
+  D:008BH         PUBLIC        TL1
+  C:0086H         PUBLIC        timer0
+  C:014EH         PUBLIC        UARTInit
+  B:0088H.4       PUBLIC        TR0
+  B:0088H.6       PUBLIC        TR1
+  B:0098H.4       PUBLIC        REN
+  D:00C8H         PUBLIC        T2CON
+  C:0164H         PUBLIC        timer0Init
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/16/2020  21:38:21  PAGE 3
+
+
+  C:000EH         PUBLIC        _display
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        z
+  -------         DO            
+  D:0006H         SYMBOL        x
+  D:0004H         SYMBOL        y
+  -------         ENDDO         
+  C:0117H         LINE#         44
+  C:0117H         LINE#         45
+  C:0117H         LINE#         47
+  C:0120H         LINE#         48
+  C:0134H         LINE#         49
+  -------         ENDPROC       _DELAY
+  -------         PROC          _DISPLAY
+  D:0007H         SYMBOL        i
+  -------         DO            
+  D:0008H         SYMBOL        wei
+  -------         ENDDO         
+  C:000EH         LINE#         57
+  C:000EH         LINE#         58
+  C:000EH         LINE#         60
+  C:0011H         LINE#         61
+  C:0013H         LINE#         62
+  C:001BH         LINE#         63
+  C:001DH         LINE#         64
+  C:0029H         LINE#         65
+  C:0029H         LINE#         66
+  C:0031H         LINE#         67
+  C:0040H         LINE#         68
+  C:0051H         LINE#         69
+  C:0051H         LINE#         70
+  C:0053H         LINE#         71
+  C:0058H         LINE#         72
+  C:005BH         LINE#         73
+  -------         ENDPROC       _DISPLAY
+  -------         PROC          TIMER0INIT
+  C:0164H         LINE#         75
+  C:0164H         LINE#         76
+  C:0164H         LINE#         77
+  C:0166H         LINE#         78
+  C:0168H         LINE#         79
+  C:016AH         LINE#         80
+  C:016DH         LINE#         81
+  C:0170H         LINE#         82
+  C:0173H         LINE#         83
+  -------         ENDPROC       TIMER0INIT
+  -------         PROC          UARTINIT
+  C:014EH         LINE#         86
+  C:014EH         LINE#         87
+  C:014EH         LINE#         88
+  C:0150H         LINE#         89
+  C:0152H         LINE#         90
+  C:0154H         LINE#         91
+  C:0156H         LINE#         92
+  C:0158H         LINE#         93
+  C:015AH         LINE#         94
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/16/2020  21:38:21  PAGE 4
+
+
+  C:015DH         LINE#         95
+  C:0160H         LINE#         96
+  C:0163H         LINE#         97
+  -------         ENDPROC       UARTINIT
+  -------         PROC          MAIN
+  C:00F8H         LINE#         99
+  C:00F8H         LINE#         100
+  C:00F8H         LINE#         101
+  C:00FBH         LINE#         102
+  C:00FEH         LINE#         103
+  C:00FEH         LINE#         104
+  C:00FEH         LINE#         105
+  C:0100H         LINE#         106
+  C:0109H         LINE#         107
+  C:010CH         LINE#         108
+  C:010EH         LINE#         109
+  C:0115H         LINE#         110
+  -------         ENDPROC       MAIN
+  -------         PROC          TIMER0
+  C:0086H         LINE#         114
+  C:0095H         LINE#         116
+  C:0098H         LINE#         117
+  C:009BH         LINE#         118
+  C:00A0H         LINE#         119
+  -------         ENDPROC       TIMER0
+  -------         ENDMOD        UART
+
+  -------         MODULE        PUTS
+  C:005CH         PUBLIC        _PUTS
+  -------         ENDMOD        PUTS
+
+  -------         MODULE        ?C?CLDPTR
+  C:0135H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        PUTCHAR
+  C:00ADH         PUBLIC        _PUTCHAR
+  -------         ENDMOD        PUTCHAR
+
+Program Size: data=13.0 xdata=0 code=376
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

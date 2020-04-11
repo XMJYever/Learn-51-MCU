@@ -1,0 +1,76 @@
+C51 COMPILER V9.00   INTERRUPT_SYSTEM                                                      03/14/2020 17:03:52 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE INTERRUPT_SYSTEM
+OBJECT MODULE PLACED IN interrupt_system.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE interrupt_system.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1                          #include <reg52.h>
+   2          #include <intrins.h>
+   3          
+   4          #define uint unsigned int
+   5          #define uchar unsigned char
+   6          
+   7          sbit DU = P2^6;//数码管段选
+   8          sbit WE = P2^7;//数码管段选
+   9          sbit key_s2 = P3^0;//独立按键S2
+  10          sbit flag = P3^7;//外部中断信号产生脚
+  11          uchar num;//数码管显示的值
+  12          
+  13          //毫秒级延时函数定义
+  14          void delay(uint z)
+  15          {
+  16   1              uint x,y;
+  17   1              for(x = z; x > 0; x--)
+  18   1                      for(y = 114; y > 0 ; y--);              
+  19   1      } 
+  20          
+  21          //外部中断1初始化
+  22          void int1Init()
+  23          {
+  24   1              EA = 1; //开总中断
+  25   1              EX1 = 1; // 开外部中断1
+  26   1              IT1 = 1; // 外部中断1下降沿触发
+  27   1      }
+  28          
+  29          // 外部中断1中断服务程序
+  30          void int1() interrupt 2
+  31          {
+  32   1              P1 = ~P1;  // 取反
+  33   1      }
+  34          
+  35          void main()//main函数自身会循环
+  36          {
+  37   1              int1Init(); // 初始化
+  38   1              while(1)
+  39   1              {
+  40   2                      if(key_s2 == 0)//判断S2是否被按下
+  41   2                      {
+  42   3                              delay(20);//按键消抖
+  43   3                              if(key_s2 == 0)
+  44   3                              {
+  45   4                                      flag = 0;
+  46   4                                      flag = 1;  // 产生了下降沿
+  47   4                                      while(!key_s2);//松手检测
+  48   4                              }       
+  49   3                      }
+  50   2              }       
+  51   1      }  
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     66    ----
+C51 COMPILER V9.00   INTERRUPT_SYSTEM                                                      03/14/2020 17:03:52 PAGE 2   
+
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
